@@ -32,5 +32,3 @@ Graph * createGraph(int vertices) {
 
     return graph;
 }
-
-
