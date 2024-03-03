@@ -1,6 +1,5 @@
 #include "TaskQueue.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 void initQueue(TaskQueue *q) {
     /* Initialize the mutex */
