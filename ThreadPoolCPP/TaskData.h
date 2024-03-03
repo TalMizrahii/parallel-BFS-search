@@ -1,10 +1,13 @@
 #ifndef PARALLELBFS_TASKDATA_H
 #define PARALLELBFS_TASKDATA_H
-class TaskData {
 
+#include <iostream>
+
+using namespace std;
+class TaskData {
 public:
     TaskData() = default;
-    explicit TaskData(int data) : data(data) {};
+    explicit TaskData(int Data);
     ~TaskData() = default;
     int getData();
 

@@ -1,30 +1,25 @@
 #include "TaskQueue.h"
 
-void TaskQueue::initQueue() {
-
-}
-
-
 void TaskQueue::insert(TaskData td) {
     {
-        std::lock_guard<std::mutex> lock(queueMutex_);
-        queue_.emplace(td);
+        std::lock_guard<std::mutex> lock(queueMutex);
+        queue.emplace(td);
     }
-    conditionFlag_.notify_one();
+    conditionFlag.notify_one();
 }
 
 TaskData TaskQueue::pop() {
-    std::unique_lock<std::mutex> lock(queueMutex_);
-    conditionFlag_.wait(lock, [this] { return !queue_.empty(); });
+    std::unique_lock<std::mutex> lock(queueMutex);
+    conditionFlag.wait(lock, [this] { return !queue.empty(); });
 
-    TaskData data = queue_.front();
-    queue_.pop();
+    TaskData data = queue.front();
+    queue.pop();
 
     return data;
 }
 
 bool TaskQueue::isEmpty() const {
-    std::lock_guard<std::mutex> lock(queueMutex_);
-    return queue_.empty();
+    std::lock_guard<std::mutex> lock(queueMutex);
+    return queue.empty();
 }
 

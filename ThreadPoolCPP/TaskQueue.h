@@ -1,10 +1,10 @@
 #ifndef PARALLELBFS_TASKQUEUE_H
 #define PARALLELBFS_TASKQUEUE_H
 
-#include "TaskData.h"
 #include <queue>
 #include <mutex>
 #include <condition_variable>
+#include "TaskData.h"
 
 
 
@@ -12,8 +12,6 @@ using namespace std;
 class TaskQueue {
 public:
     TaskQueue() = default;
-
-    void initQueue();
     ~TaskQueue() = default;
 
     void insert(TaskData td);
@@ -23,9 +21,9 @@ public:
     bool isEmpty() const;
 
 private:
-    queue<TaskData> queue_;
-    mutable mutex queueMutex_;
-    condition_variable conditionFlag_;
+    queue<TaskData> queue;
+    mutable mutex queueMutex;
+    condition_variable conditionFlag;
 };
 
 
