@@ -1,10 +1,11 @@
 #include "ThreadPool.h"
+#include "bfs.cpp"
 
 ThreadPool::ThreadPool(size_t num_threads) {
     for (size_t i = 0; i < num_threads; ++i) {
         threads.emplace_back([this] {
             while (true) {
-                function<void()> task;
+                TaskData td;
                 {
                     unique_lock<mutex> lock(QueueMutex);
                     conditionFlag.wait(lock, [this] {
@@ -15,10 +16,11 @@ ThreadPool::ThreadPool(size_t num_threads) {
                         return;
                     }
 
-                    task = tasks->pop();
-                }
+                    // Get the next task from the queue
+                    TaskData td = tasks->pop();
 
-                task();
+                }
+                bfs_visit(td);
             }
         });
     }

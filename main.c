@@ -1,4 +1,4 @@
-#include "SyncGraph/graph.h"
+#include "SyncGraphOld/graph.h"
 #include <stdlib.h>
 #include <stdio.h>
 

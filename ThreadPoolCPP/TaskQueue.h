@@ -15,9 +15,7 @@ public:
     ~TaskQueue() = default;
 
     void insert(TaskData td);
-
     TaskData pop();
-
     bool isEmpty() const;
 
 private:

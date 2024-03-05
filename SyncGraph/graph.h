@@ -1,40 +1,32 @@
-#ifndef GRAPH_H
-#define GRAPH_H
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
+#ifndef PARALLELBFS_GRAPH_H
+#define PARALLELBFS_GRAPH_H
+#include <iostream>
+#include <vector>
+#include <mutex>
 
 typedef int vertex;
-typedef pthread_mutex_t mutex;
 
-struct node {
+class Node {
+public:
     vertex v;
-    struct node *next;
+    Node* next;
+
+    Node(vertex v) : v(v), next(nullptr) {}
 };
 
-typedef struct node node;
+class Graph {
+public:
+    Graph(int vertices);
+    ~Graph();
 
-struct Graph {
+    void addEdge(vertex source, vertex destination);
+    void printGraph();
+
+private:
     unsigned int numVertices;
-    node **adjacencyLists;
-    int *numVisits; // Number of times a vertex has been visited
-    mutex *num_visits_mutexes; // Mutex for each vertex
+    std::vector<Node*> adjacencyLists;
+    std::vector<int> numVisits; // Number of times a vertex has been visited
+    std::vector<std::mutex> numVisitsMutexes; // Mutex for each vertex
 };
 
-typedef struct Graph Graph;
-
-/*
- * NOTE: these functions are not safe to use in 
- * a multithreaded environment - they don't make use of mutexes.
- * The only purpose of these functions is to create a graph.
- * Very similar implementation to the one in the regular DFS.
- */
-
-node * createNode(vertex v);
-
-void addEdge(Graph *graph, vertex source, vertex destination);
-
-Graph * createGraph(int vertices);
-
-#endif
+#endif //PARALLELBFS_GRAPH_H
