@@ -1,5 +1,4 @@
 #include "graph.h"
-#include "bfs.cpp"
 
 #ifdef __cplusplus
 
@@ -32,9 +31,6 @@ void Graph::addEdge(vertex source, vertex destination) {
     adjacencyLists[destination] = newNode;
 }
 
-void bfs(Graph *graph, int **m) {
-    bfsStart(graph, m);
-}
 
 std::vector<Node *> Graph::getAdjacencyLists() {
     return this->adjacencyLists;
