@@ -8,22 +8,24 @@
 #include <queue>
 #include <thread>
 #include "TaskQueue.h"
+#include "bfs.cpp"
 
 using namespace std;
 
 class ThreadPool {
 public:
-    explicit ThreadPool(size_t num_threads = thread::hardware_concurrency());
+    ThreadPool();
+
     ~ThreadPool();
 
-    void setTaskQueue(TaskQueue* queue);
+    void enqueueTask(const function<void()> &task);
 
 private:
     bool stopBool = false;
-    TaskQueue* tasks;
+    TaskQueue *tasks;
     condition_variable conditionFlag;
     vector<thread> threads;
-    mutex QueueMutex;
+    mutex queueMutex;
 };
 
 #endif //PARALLELBFS_THREADPOOL_H

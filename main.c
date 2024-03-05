@@ -1,4 +1,4 @@
-#include "SyncGraphOld/graph.h"
+#include "SyncGraph/graph.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -13,8 +13,8 @@ void main(void) {
     Graph *graph = createGraph(numVertices);
 
     printf("Add %d Edges of the Graph \
-            (Vertex numbering should be from 0 to %d)\n",
-             numEdges, numVertices - 1);
+    (Vertex numbering should be from 0 to %d)\n",
+    numEdges, numVertices - 1);
 
     int source, destination;
     for (int i = 0; i < numEdges; i++) {

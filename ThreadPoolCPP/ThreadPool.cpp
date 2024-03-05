@@ -1,34 +1,31 @@
 #include "ThreadPool.h"
-#include "bfs.cpp"
 
-ThreadPool::ThreadPool(size_t num_threads) {
+ThreadPool::ThreadPool() : tasks(nullptr), stopBool(false) {
+    size_t num_threads = thread::hardware_concurrency();
     for (size_t i = 0; i < num_threads; ++i) {
         threads.emplace_back([this] {
             while (true) {
-                TaskData td;
+                std::function<void()> task;
                 {
-                    unique_lock<mutex> lock(QueueMutex);
-                    conditionFlag.wait(lock, [this] {
-                        return !tasks->isEmpty() || stopBool;
+                    std::unique_lock<std::mutex> lock(queueMutex);
+                    this->conditionFlag.wait(lock, [this] {
+                        return tasks != nullptr || stopBool;
                     });
 
-                    if (stopBool && tasks->isEmpty()) {
+                    if (stopBool && (tasks == nullptr || tasks->isEmpty())) {
                         return;
                     }
-
-                    // Get the next task from the queue
-                    TaskData td = tasks->pop();
-
+                    task = tasks->pop();
                 }
-                bfs_visit(td);
+
+                task();
             }
         });
     }
 }
-
 ThreadPool::~ThreadPool() {
     {
-        unique_lock<mutex> lock(QueueMutex);
+        unique_lock<mutex> lock(queueMutex);
         stopBool = true;
     }
 
@@ -37,8 +34,9 @@ ThreadPool::~ThreadPool() {
     for (auto &thread : threads) {
         thread.join();
     }
+
 }
 
-void ThreadPool::setTaskQueue(TaskQueue *queue) {
-    this->tasks = queue;
+void ThreadPool::enqueueTask(const function<void()>& task) {
+    tasks->insert(task);
 }

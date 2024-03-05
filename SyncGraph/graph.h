@@ -1,33 +1,50 @@
 #ifndef PARALLELBFS_GRAPH_H
 #define PARALLELBFS_GRAPH_H
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    typedef struct Graph Graph;
+    Graph *createGraph(int vertices);
+    void addEdge(Graph *graph, int source, int destination);
+#ifdef __cplusplus
+}
+#endif
+#ifdef __cplusplus
+
 #include <iostream>
 #include <vector>
 #include <mutex>
 
 typedef int vertex;
-
+using namespace std;
 class Node {
 public:
     vertex v;
-    Node* next;
+    Node *next;
 
-    Node(vertex v) : v(v), next(nullptr) {}
+    explicit Node(vertex v) : v(v), next(nullptr) {}
 };
 
 class Graph {
 public:
-    Graph(int vertices);
+    explicit Graph(int vertices);
     ~Graph();
 
     void addEdge(vertex source, vertex destination);
-    void printGraph();
+
+    unsigned int getNumVertices() const { return numVertices; }
+
+    vector<Node *> getAdjacencyLists();
+
+protected:
+    Node *createNode(vertex v);
 
 private:
     unsigned int numVertices;
-    std::vector<Node*> adjacencyLists;
-    std::vector<int> numVisits; // Number of times a vertex has been visited
-    std::vector<std::mutex> numVisitsMutexes; // Mutex for each vertex
+    vector<Node *> adjacencyLists;
 };
 
+#endif
 #endif //PARALLELBFS_GRAPH_H
-

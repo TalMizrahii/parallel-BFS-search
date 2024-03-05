@@ -4,25 +4,26 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include "TaskData.h"
-
-
+#include <functional>
 
 using namespace std;
+
 class TaskQueue {
 public:
-    TaskQueue() = default;
+    TaskQueue();
+
     ~TaskQueue() = default;
 
-    void insert(TaskData td);
-    TaskData pop();
+    void insert(const std::function<void()> &task);
+
+    std::function<void()> pop();
+
     bool isEmpty() const;
 
 private:
-    queue<TaskData> queue;
-    mutable mutex queueMutex;
+    queue<std::function<void()>> queue;
+    mutable std::mutex queueMutex;
     condition_variable conditionFlag;
 };
-
 
 #endif //PARALLELBFS_TASKQUEUE_H

@@ -1,28 +1,29 @@
 #include "graph.h"
+#include "bfs.cpp"
 
-Graph::Graph(int vertices) : numVertices(vertices), adjacencyLists(vertices, nullptr), numVisits(vertices, 0), numVisitsMutexes(vertices) {
-    for (int i = 0; i < vertices; i++) {
-        std::lock_guard<std::mutex> lock(numVisitsMutexes[i]);
-    }
+#ifdef __cplusplus
+
+Graph::Graph(int vertices) : numVertices(vertices) {
+    adjacencyLists.resize(vertices, nullptr);
 }
 
 Graph::~Graph() {
     for (int i = 0; i < numVertices; i++) {
-        Node* current = adjacencyLists[i];
+        Node *current = adjacencyLists[i];
         while (current != nullptr) {
-            Node* next = current->next;
+            Node *next = current->next;
             delete current;
             current = next;
         }
     }
 }
 
-Node* createNode(vertex v) {
+Node *Graph::createNode(vertex v) {
     return new Node(v);
 }
 
 void Graph::addEdge(vertex source, vertex destination) {
-    Node* newNode = createNode(destination);
+    Node *newNode = createNode(destination);
     newNode->next = adjacencyLists[source];
     adjacencyLists[source] = newNode;
 
@@ -31,14 +32,27 @@ void Graph::addEdge(vertex source, vertex destination) {
     adjacencyLists[destination] = newNode;
 }
 
-void Graph::printGraph() {
-    for (int i = 0; i < numVertices; i++) {
-        std::cout << "Adjacency list of vertex " << i << ": ";
-        Node* current = adjacencyLists[i];
-        while (current != nullptr) {
-            std::cout << current->v << " ";
-            current = current->next;
-        }
-        std::cout << std::endl;
-    }
+void bfs(Graph *graph, int **m) {
+    bfsStart(graph, m);
 }
+
+std::vector<Node *> Graph::getAdjacencyLists() {
+    return this->adjacencyLists;
+}
+extern "C" {
+
+    Graph* createGraph(int vertices) {
+        return new Graph(vertices);
+    }
+
+    void destroyGraph(Graph* graph) {
+        delete graph;
+    }
+
+    void addEdge(Graph* graph, int source, int destination) {
+        graph->addEdge(source, destination);
+    }
+
+} // extern "C"
+
+#endif // __cplusplus
