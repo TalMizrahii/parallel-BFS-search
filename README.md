@@ -52,10 +52,10 @@ To install and run the program you use [Git](https://git-scm.com). From your com
 
 ```bash
 # Clone this repository.
-$ git clone https://github.com/TalMizrahii/parallelLinkedList
+$ git clone https://github.com/TalMizrahii/parallel-BFS-search
 
 # Navigate to the repository directory:
-$ cd parallelLinkedList
+$ cd parallel-BFS-search
 
 # Compile the program
 $ make
