@@ -38,7 +38,7 @@ The program's implementation revolves around the following key aspects:
 
 This program has the following dependencies:
 
-- **Thread Library**: The program requires either `<pthread.h>` or `<thread>` as the thread library for managing parallelism. Ensure that the chosen library is supported and properly configured in the compilation environment.
+- **Thread Library**: The program requires `<thread>` as the thread library for managing parallelism. Ensure that the chosen library is supported and properly configured in the compilation environment.
 
 ## Installing And Executing
 
